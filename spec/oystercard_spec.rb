@@ -3,8 +3,6 @@ require './lib/oystercard.rb'
 describe Oystercard do
   subject(:oystercard) { described_class.new }
 
-
-
   describe '#initialize' do
     it 'should have a default balance equal to DEFAULT_BALANCE' do
     expect(oystercard.balance).to eq Oystercard::DEFAULT_BALANCE
@@ -44,6 +42,7 @@ end
   describe 'Methods that test a in journey card' do
     describe '#touch_in' do
       it 'should set in_journey to true if touched in' do
+        oystercard.top_up(10)
         oystercard.touch_in
         expect(oystercard.in_journey?).to eq true
       end
@@ -54,13 +53,11 @@ end
   end
 
   describe 'Methods that test a in journey card' do
-    before do
-      allow(oystercard.balance).to receive(:top_up) {10}
-      oystercard.touch_in
-    end
     describe '#touch_out' do
       it 'should set in_journey to false' do
-        allow(oystercard).to receive(:top_up) {10}
+        oystercard.top_up(10)
+        oystercard.touch_in
+        oystercard.touch_out
         expect(oystercard.in_journey?).to eq false
       end
     end
