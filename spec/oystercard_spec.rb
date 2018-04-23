@@ -21,9 +21,18 @@ end
       expect(oystercard.balance).to eq 10
     end
     it 'should raise an error if the balance is at max limit' do
-      allow(oystercard).to receive(:limit_reached?) { true }
-      expect { oystercard.top_up(10) }.to raise_error "This card has reached its limit of #{Oystercard::MAX_BALANCE}"
+      allow(oystercard).to receive(:balance) { 60 }
+      expect { oystercard.top_up(40) }.to raise_error "Invalid top up. This card has a max limit of #{Oystercard::MAX_BALANCE}"
     end
   end
 
+  it { is_expected.to respond_to(:deduct).with(1).argument }
+
+  describe '#deduct' do
+    it 'should reduce the balance of the card by the given amount' do
+      oystercard.top_up(20)
+      oystercard.deduct(10)
+      expect(oystercard.balance).to eq 20 - 10
+    end
+  end
 end

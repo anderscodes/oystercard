@@ -10,14 +10,12 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "This card has reached its limit of #{MAX_BALANCE}" if limit_reached?
+    raise "Invalid top up. This card has a max limit of #{MAX_BALANCE}" if amount + balance > MAX_BALANCE
     @balance += amount
   end
 
-private
-
-  def limit_reached?
-    balance >= MAX_BALANCE
+  def deduct(amount)
+    @balance -= amount
   end
 
 end
