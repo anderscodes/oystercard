@@ -10,8 +10,6 @@ subject(:oystercard) { described_class.new }
     end
   end
 
-it { is_expected.to respond_to :top_up}
-
 describe '#top_up' do
   it 'should allow user to increase balance of the oystercard' do
     oystercard.top_up(10)
