@@ -7,6 +7,9 @@ describe Oystercard do
     it 'should have a default balance equal to DEFAULT_BALANCE' do
     expect(oystercard.balance).to eq Oystercard::DEFAULT_BALANCE
   end
+  it 'should not be in journey as a default' do
+    expect(oystercard.in_journey?).to eq false
+  end
 end
 
   describe '#balance' do
@@ -26,7 +29,7 @@ end
     end
   end
 
-  it { is_expected.to respond_to(:deduct).with(1).argument }
+  # it { is_expected.to respond_to(:touch_out) }
 
   describe '#deduct' do
     it 'should reduce the balance of the card by the given amount' do
@@ -35,4 +38,22 @@ end
       expect(oystercard.balance).to eq 20 - 10
     end
   end
+
+  describe 'Methods that test a in journey card' do
+    before do
+      oystercard.touch_in
+    end
+    describe '#touch_in' do
+      it 'should set in_journey to true if touched in' do
+        expect(oystercard.in_journey?).to eq true
+      end
+    end
+    describe '#touch_out' do
+      it 'should set in_journey to false' do
+        oystercard.touch_out
+        expect(oystercard.in_journey?).to eq false
+      end
+    end
+  end
+
 end
