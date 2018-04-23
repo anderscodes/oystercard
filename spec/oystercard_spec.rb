@@ -39,7 +39,6 @@ end
     end
   end
 
-  describe 'Methods that test a in journey card' do
     describe '#touch_in' do
       it 'should set in_journey to true if touched in' do
         oystercard.top_up(10)
@@ -50,9 +49,8 @@ end
     it 'raises an error if the card has insufficient balance to touch in' do
       expect { oystercard.touch_in }.to raise_error "Insufficient balance"
     end
-  end
 
-  describe 'Methods that test a in journey card' do
+
     describe '#touch_out' do
       it 'should set in_journey to false' do
         oystercard.top_up(10)
@@ -61,6 +59,6 @@ end
         expect(oystercard.in_journey?).to eq false
       end
     end
-  end
+
 
 end
