@@ -64,7 +64,9 @@ end
 
     it 'should save current_journey' do
       oystercard.touch_out(station)
-      expect(oystercard.journeys.pop[:exit_station]).to eq station
+      last_journey = oystercard.journeys.pop
+      expect(last_journey[:entry_station]).to eq station
+      expect(last_journey[:exit_station]).to eq station
     end
 
     it 'should reset current_journey' do

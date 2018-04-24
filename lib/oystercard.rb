@@ -19,7 +19,7 @@ class Oystercard
   end
 
   def in_journey?
-    !@current_journey[:entry_station].nil?
+    !current_journey[:entry_station].nil?
   end
 
   def touch_in(station)
@@ -43,7 +43,7 @@ class Oystercard
   end
 
   def save_journey
-    @journeys.push(@current_journey)
+    journeys.push(current_journey)
   end
 
   def reset_current_journey
