@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :journeys, :current_journey
+  attr_reader :balance, :journeys
 
   MAX_BALANCE = 90
   DEFAULT_BALANCE = 0
@@ -14,12 +14,13 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise "Invalid top up. This card has a max limit of #{MAX_BALANCE}" if amount + balance > MAX_BALANCE
+    raise "Amount must be positive" if amount.negative?
+    raise "Invalid top up. This card has a max limit of #{MAX_BALANCE}" if over_balance?(amount)
     @balance += amount
   end
 
   def in_journey?
-    !current_journey[:entry_station].nil?
+    !!@current_journey[:entry_station]
   end
 
   def touch_in(station)
@@ -43,11 +44,15 @@ class Oystercard
   end
 
   def save_journey
-    journeys.push(current_journey)
+    journeys.push(@current_journey)
   end
 
   def reset_current_journey
     @current_journey = {}
+  end
+
+  def over_balance?(amount)
+    amount + balance > MAX_BALANCE
   end
 
 end
