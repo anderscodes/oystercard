@@ -61,6 +61,10 @@ end
     it 'should deduct the minimum fare from the balance' do
       expect {oystercard.touch_out}.to change {oystercard.balance}.by(-Oystercard::MIN_BALANCE)
     end
+
+    it 'should set entry station to nil' do
+      expect { oystercard.touch_out }.to change { oystercard.entry_station }.to nil
+    end
   end
 
 
