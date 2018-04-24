@@ -26,10 +26,27 @@ describe Journey do
       end
     end
     context 'if the journey has not been finished' do
+      before { journey.finish_journey }
       it 'returns the penalty fare' do
         expect(journey.fare).to eq Journey::PENALTY_FARE
       end
     end
   end
+
+  describe '#complete?' do
+    context 'if the journey has completed' do
+      before { journey.finish_journey(station) }
+      it 'should return true' do
+        expect(journey.complete?).to eq true
+      end
+    end
+    context 'if the journey has not completed' do
+      it 'should return false' do
+        expect(journey.complete?).to eq false
+      end
+    end
+  end
+
+
 
 end

@@ -9,16 +9,16 @@ class Journey
     @entry_station = station
   end
 
-  def finish_journey(station)
+  def finish_journey(station = 'unknown')
     @exit_station = station
   end
 
   def fare
-    if exit_station
-       MIN_FARE
-     else
-       PENALTY_FARE
-     end
+    exit_station == 'unknown' ? PENALTY_FARE : MIN_FARE
+  end
+
+  def complete?
+    !!exit_station
   end
 
 end
