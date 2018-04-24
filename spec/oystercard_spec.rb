@@ -2,6 +2,7 @@ require './lib/oystercard.rb'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
+  let(:station) { double(:station) }
 
   describe '#initialize' do
     it 'should have a default balance equal to DEFAULT_BALANCE' do
@@ -30,14 +31,20 @@ end
   end
 
   describe '#touch_in' do
-    it 'should set in_journey to true if touched in' do
-      oystercard.top_up(10)
-      oystercard.touch_in
-      expect(oystercard.in_journey?).to eq true
+    context 'when there are sufficient funds' do
+      before do
+        oystercard.top_up(10)
+        oystercard.touch_in(station)
+      end
+      it 'should set in_journey to true if touched in' do
+        expect(oystercard.in_journey?).to eq true
+      end
+      it 'saves an entry station' do
+        expect(oystercard.entry_station).to eq station
+      end
     end
-
     it 'raises an error if the card has insufficient balance to touch in' do
-      expect { oystercard.touch_in }.to raise_error "Insufficient balance"
+      expect { oystercard.touch_in(station) }.to raise_error "Insufficient balance"
     end
   end
 
@@ -45,7 +52,7 @@ end
   describe '#touch_out' do
     before do
       oystercard.top_up(10)
-      oystercard.touch_in
+      oystercard.touch_in(station)
     end
     it 'should set in_journey to false' do
       oystercard.touch_out
