@@ -40,7 +40,7 @@ end
         expect(oystercard.in_journey?).to eq true
       end
       it 'saves an entry station' do
-        expect(oystercard.entry_station).to eq station
+        expect(oystercard.current_journey[:entry_station]).to eq station
       end
     end
     it 'raises an error if the card has insufficient balance to touch in' do
@@ -55,15 +55,21 @@ end
       oystercard.touch_in(station)
     end
     it 'should set in_journey to false' do
-      oystercard.touch_out
+      oystercard.touch_out(station)
       expect(oystercard.in_journey?).to eq false
     end
     it 'should deduct the minimum fare from the balance' do
-      expect {oystercard.touch_out}.to change {oystercard.balance}.by(-Oystercard::MIN_BALANCE)
+      expect {oystercard.touch_out(station)}.to change {oystercard.balance}.by(-Oystercard::MIN_BALANCE)
     end
 
-    it 'should set entry station to nil' do
-      expect { oystercard.touch_out }.to change { oystercard.entry_station }.to nil
+    it 'should save current_journey' do
+      oystercard.touch_out(station)
+      expect(oystercard.journeys.pop[:exit_station]).to eq station
+    end
+
+    it 'should reset current_journey' do
+      oystercard.touch_out(station)
+      expect(oystercard.current_journey).to be_an_instance_of(Hash).and be_empty
     end
   end
 

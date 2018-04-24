@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :journeys
+  attr_reader :balance, :journeys, :current_journey
 
   MAX_BALANCE = 90
   DEFAULT_BALANCE = 0
@@ -19,7 +19,7 @@ class Oystercard
   end
 
   def in_journey?
-    !@entry_station.nil?
+    !@current_journey[:entry_station].nil?
   end
 
   def touch_in(station)
