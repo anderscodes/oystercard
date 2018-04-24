@@ -29,36 +29,32 @@ end
     end
   end
 
-  # it { is_expected.to respond_to(:touch_out) }
-
-  describe '#deduct' do
-    it 'should reduce the balance of the card by the given amount' do
-      oystercard.top_up(20)
-      oystercard.deduct(10)
-      expect(oystercard.balance).to eq 20 - 10
+  describe '#touch_in' do
+    it 'should set in_journey to true if touched in' do
+      oystercard.top_up(10)
+      oystercard.touch_in
+      expect(oystercard.in_journey?).to eq true
     end
-  end
 
-    describe '#touch_in' do
-      it 'should set in_journey to true if touched in' do
-        oystercard.top_up(10)
-        oystercard.touch_in
-        expect(oystercard.in_journey?).to eq true
-      end
-    end
     it 'raises an error if the card has insufficient balance to touch in' do
       expect { oystercard.touch_in }.to raise_error "Insufficient balance"
     end
+  end
 
 
-    describe '#touch_out' do
-      it 'should set in_journey to false' do
-        oystercard.top_up(10)
-        oystercard.touch_in
-        oystercard.touch_out
-        expect(oystercard.in_journey?).to eq false
-      end
+  describe '#touch_out' do
+    before do
+      oystercard.top_up(10)
+      oystercard.touch_in
     end
+    it 'should set in_journey to false' do
+      oystercard.touch_out
+      expect(oystercard.in_journey?).to eq false
+    end
+    it 'should deduct the minimum fare from the balance' do
+      expect {oystercard.touch_out}.to change {oystercard.balance}.by(-Oystercard::MIN_BALANCE)
+    end
+  end
 
 
 end
